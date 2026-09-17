@@ -1,0 +1,163 @@
+/* CORES
+   Bordô: #550000
+   Branco: #ffffff
+   Cinza: #d2d4d6
+*/
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    color: #333333;
+}
+
+/*Barra superior*/
+.topbar {
+    height: 70px;
+    background-color: #550000;
+
+    display: flex;
+    align-items: center;
+
+    padding: 0 30px;
+}
+
+.logo {
+    color: #ffffff;
+    font-size: 22px;
+    font-weight: bold;
+
+    margin-right: 40px;
+}
+
+.menu {
+    display: flex;
+    gap: 5px;
+}
+
+.menu-item {
+    color: #ffffff;
+    text-decoration: none;
+
+    padding: 12px 15px;
+    border-radius: 5px;
+
+    font-size: 14px;
+}
+
+.menu-item:hover {
+    background-color: #700000;
+}
+
+.menu-item.active {
+    background-color: #700000;
+}
+
+.usuario {
+    color: #ffffff;
+    margin-left: auto;
+}
+
+/* Conteudo */
+.content {
+    padding: 30px;
+}
+
+h1 {
+    color: #550000;
+    margin-bottom: 25px;
+}
+
+/* Cards */
+.cards {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 25px;
+}
+
+.card {
+    background-color: #ffffff;
+    border: 1px solid #d2d4d6;
+    border-left: 4px solid #550000;
+    border-radius: 8px;
+    padding: 20px;
+    flex: 1;
+    box-shadow: 0 2px 8px gray;
+}
+
+.card-title {
+    color: #777777;
+    font-size: 14px;
+
+    margin-bottom: 10px;
+}
+
+.card-value {
+    color: #550000;
+    font-size: 22px;
+    font-weight: bold;
+}
+
+
+/* Paineis */
+.dashboard {
+    display: flex;
+    gap: 20px;
+}
+
+.panel {
+    background-color: #ffffff;
+
+    border: 1px solid #d2d4d6;
+    border-radius: 8px;
+
+    padding: 20px;
+
+    flex: 1;
+    min-height: 250px;
+    box-shadow: 0 2px 8px gray;
+}
+
+.panel h2 {
+    color: #550000;
+    font-size: 18px;
+
+    border-bottom: 1px solid #d2d4d6;
+
+    padding-bottom: 15px;
+    margin-bottom: 15px;
+}
+
+.panel p {
+    color: #777777;
+}
+
+
+/* Responsividade */
+@media (max-width: 900px) {
+
+    .topbar {
+        height: auto;
+        padding: 15px;
+        flex-wrap: wrap;
+    }
+
+    .logo {
+        margin-right: 20px;
+    }
+
+    .menu {
+        flex-wrap: wrap;
+    }
+
+    .cards,
+    .dashboard {
+        flex-direction: column;
+    }
+
+}
