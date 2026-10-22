@@ -4,11 +4,13 @@
    Cinza: #d2d4d6
 */
 
+
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
+
 
 body {
     font-family: Arial, sans-serif;
@@ -16,9 +18,15 @@ body {
     color: #333333;
 }
 
-/*Barra superior*/
+
+/* ============================= */
+/* BARRA SUPERIOR */
+/* ============================= */
+
 .topbar {
+
     height: 70px;
+
     background-color: #550000;
 
     display: flex;
@@ -27,137 +35,780 @@ body {
     padding: 0 30px;
 }
 
+
 .logo {
+
     color: #ffffff;
+
     font-size: 22px;
     font-weight: bold;
 
     margin-right: 40px;
 }
 
+
 .menu {
+
     display: flex;
+
     gap: 5px;
 }
 
+
 .menu-item {
+
     color: #ffffff;
+
     text-decoration: none;
 
     padding: 12px 15px;
+
     border-radius: 5px;
 
     font-size: 14px;
 }
 
+
 .menu-item:hover {
+
     background-color: #700000;
 }
+
 
 .menu-item.active {
+
     background-color: #700000;
 }
 
+
 .usuario {
+
     color: #ffffff;
+
     margin-left: auto;
 }
 
-/* Conteudo */
+
+/* ============================= */
+/* CONTEÚDO */
+/* ============================= */
+
 .content {
+
     padding: 30px;
 }
 
+
 h1 {
+
     color: #550000;
+
     margin-bottom: 25px;
 }
 
-/* Cards */
+
+/* ============================= */
+/* CARDS */
+/* ============================= */
+
 .cards {
+
     display: flex;
+
     gap: 20px;
+
     margin-bottom: 25px;
 }
+
 
 .card {
+
     background-color: #ffffff;
+
     border: 1px solid #d2d4d6;
+
     border-left: 4px solid #550000;
+
     border-radius: 8px;
+
     padding: 20px;
+
     flex: 1;
-    box-shadow: 0 2px 8px gray;
+
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 }
 
+
 .card-title {
+
     color: #777777;
+
     font-size: 14px;
 
     margin-bottom: 10px;
 }
 
+
 .card-value {
+
     color: #550000;
+
     font-size: 22px;
+
     font-weight: bold;
 }
 
 
-/* Paineis */
+/* ============================= */
+/* PAINÉIS */
+/* ============================= */
+
 .dashboard {
+
     display: flex;
+
     gap: 20px;
 }
 
+
 .panel {
+
     background-color: #ffffff;
 
     border: 1px solid #d2d4d6;
+
     border-radius: 8px;
 
     padding: 20px;
 
     flex: 1;
+
     min-height: 250px;
-    box-shadow: 0 2px 8px gray;
+
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 }
 
+
 .panel h2 {
+
     color: #550000;
+
     font-size: 18px;
 
     border-bottom: 1px solid #d2d4d6;
 
     padding-bottom: 15px;
+
     margin-bottom: 15px;
 }
 
+
 .panel p {
+
     color: #777777;
 }
 
 
-/* Responsividade */
+/* ============================= */
+/* CABEÇALHO DA PÁGINA */
+/* ============================= */
+
+.pagina-cabecalho {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    margin-bottom: 25px;
+}
+
+
+.pagina-cabecalho h1 {
+
+    margin-bottom: 5px;
+}
+
+
+.pagina-cabecalho p {
+
+    color: #777777;
+}
+
+
+/* ============================= */
+/* BOTÕES */
+/* ============================= */
+
+.botao-principal {
+
+    background-color: #550000;
+
+    color: #ffffff;
+
+    border: none;
+
+    border-radius: 6px;
+
+    padding: 12px 18px;
+
+    font-size: 14px;
+
+    font-weight: bold;
+
+    cursor: pointer;
+}
+
+
+.botao-principal:hover {
+
+    background-color: #700000;
+}
+
+
+.botao-secundario {
+
+    background-color: #ffffff;
+
+    color: #550000;
+
+    border: 1px solid #550000;
+
+    border-radius: 6px;
+
+    padding: 12px 18px;
+
+    font-size: 14px;
+
+    font-weight: bold;
+
+    cursor: pointer;
+}
+
+
+/* ============================= */
+/* LISTA DE VEÍCULOS */
+/* ============================= */
+
+.lista-veiculos {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 15px;
+}
+
+
+.veiculo {
+
+    background-color: #ffffff;
+
+    border: 1px solid #d2d4d6;
+
+    border-left: 4px solid #550000;
+
+    border-radius: 8px;
+
+    padding: 20px;
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+
+.veiculo-info h2 {
+
+    color: #550000;
+
+    font-size: 18px;
+
+    margin-bottom: 8px;
+}
+
+
+.veiculo-info p {
+
+    color: #777777;
+
+    font-size: 14px;
+}
+
+
+.veiculo-consumo {
+
+    text-align: right;
+}
+
+
+.veiculo-consumo span {
+
+    display: block;
+
+    color: #777777;
+
+    font-size: 13px;
+
+    margin-bottom: 5px;
+}
+
+
+.veiculo-consumo strong {
+
+    color: #550000;
+
+    font-size: 18px;
+}
+
+
+/* ============================= */
+/* FORMULÁRIO */
+/* ============================= */
+
+.formulario {
+
+    background-color: #ffffff;
+
+    border: 1px solid #d2d4d6;
+
+    border-radius: 8px;
+
+    padding: 25px;
+
+    max-width: 600px;
+
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+
+.campo {
+
+    display: flex;
+
+    flex-direction: column;
+
+    margin-bottom: 20px;
+}
+
+
+.campo label {
+
+    color: #550000;
+
+    font-size: 14px;
+
+    font-weight: bold;
+
+    margin-bottom: 8px;
+}
+
+
+.campo input,
+.campo select {
+
+    padding: 12px;
+
+    border: 1px solid #d2d4d6;
+
+    border-radius: 5px;
+
+    font-size: 14px;
+}
+
+
+.campo input:focus,
+.campo select:focus {
+
+    outline: none;
+
+    border-color: #550000;
+}
 @media (max-width: 900px) {
 
     .topbar {
+
         height: auto;
+
         padding: 15px;
+
         flex-wrap: wrap;
     }
 
+
     .logo {
+
         margin-right: 20px;
     }
 
+
     .menu {
+
         flex-wrap: wrap;
     }
 
+
     .cards,
     .dashboard {
+
         flex-direction: column;
+    }
+
+}
+
+
+/* ============================= */
+/* ABASTECIMENTOS */
+/* ============================= */
+
+.lista-abastecimentos {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 20px;
+}
+
+
+.abastecimento-veiculo {
+
+    background-color: #ffffff;
+
+    border: 1px solid #d2d4d6;
+
+    border-left: 4px solid #550000;
+
+    border-radius: 8px;
+
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+
+    overflow: hidden;
+}
+
+
+.abastecimento-cabecalho {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    flex-wrap: wrap;
+
+    gap: 15px;
+
+    padding: 20px;
+
+    border-bottom: 1px solid #d2d4d6;
+}
+
+
+.abastecimento-cabecalho h2 {
+
+    color: #550000;
+
+    font-size: 18px;
+
+    margin-bottom: 6px;
+}
+
+
+.abastecimento-cabecalho h2 span {
+
+    color: #777777;
+
+    font-size: 14px;
+
+    font-weight: normal;
+}
+
+
+.abastecimento-cabecalho p {
+
+    color: #777777;
+
+    font-size: 13px;
+}
+
+
+.abastecimento-totais {
+
+    display: flex;
+
+    gap: 20px;
+
+    text-align: right;
+}
+
+
+.abastecimento-totais div + div {
+
+    border-left: 1px solid #d2d4d6;
+
+    padding-left: 20px;
+}
+
+
+.abastecimento-totais span {
+
+    display: block;
+
+    color: #777777;
+
+    font-size: 12px;
+
+    text-transform: uppercase;
+
+    margin-bottom: 5px;
+}
+
+
+.abastecimento-totais strong {
+
+    color: #550000;
+
+    font-size: 18px;
+}
+
+
+.tabela-container {
+
+    overflow-x: auto;
+}
+
+
+.tabela-abastecimentos {
+
+    width: 100%;
+
+    border-collapse: collapse;
+
+    font-size: 14px;
+
+    text-align: left;
+}
+
+
+.tabela-abastecimentos thead {
+
+    background-color: #f4f4f4;
+}
+
+
+.tabela-abastecimentos th {
+
+    color: #777777;
+
+    font-size: 12px;
+
+    text-transform: uppercase;
+
+    padding: 12px 20px;
+}
+
+
+.tabela-abastecimentos td {
+
+    padding: 12px 20px;
+
+    border-top: 1px solid #d2d4d6;
+}
+
+
+.tabela-abastecimentos tbody tr:hover {
+
+    background-color: #faf5f5;
+}
+
+
+.tabela-abastecimentos .direita {
+
+    text-align: right;
+}
+
+
+.tag-combustivel {
+
+    display: inline-block;
+
+    background-color: #d2d4d6;
+
+    color: #333333;
+
+    font-size: 12px;
+
+    padding: 3px 8px;
+
+    border-radius: 4px;
+}
+
+
+.valor-total {
+
+    color: #550000;
+
+    font-weight: bold;
+}
+
+
+@media (max-width: 900px) {
+
+    .abastecimento-totais {
+
+        text-align: left;
+    }
+
+}
+
+
+/* ============================= */
+/* NOVO ABASTECIMENTO (FORMULÁRIO) */
+/* ============================= */
+
+.campo-linha {
+
+    display: flex;
+
+    gap: 20px;
+}
+
+
+.campo-linha .campo {
+
+    flex: 1;
+}
+
+
+.total-previsto {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    background-color: #f4f4f4;
+
+    border: 1px solid #d2d4d6;
+
+    border-left: 4px solid #550000;
+
+    border-radius: 5px;
+
+    padding: 14px 16px;
+
+    margin-bottom: 20px;
+}
+
+
+.total-previsto span {
+
+    color: #777777;
+
+    font-size: 14px;
+}
+
+
+.total-previsto strong {
+
+    color: #550000;
+
+    font-size: 20px;
+}
+
+
+/* ============================= */
+/* RESUMO NO INÍCIO */
+/* ============================= */
+
+.resumo-abastecimentos {
+
+    list-style: none;
+}
+
+
+.resumo-abastecimentos li {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    gap: 15px;
+
+    padding: 10px 0;
+
+    border-bottom: 1px solid #d2d4d6;
+}
+
+
+.resumo-abastecimentos li strong {
+
+    display: block;
+
+    color: #333333;
+
+    font-size: 14px;
+
+    margin-bottom: 3px;
+}
+
+
+.resumo-abastecimentos li span {
+
+    color: #777777;
+
+    font-size: 12px;
+}
+
+
+.resumo-valor {
+
+    color: #550000;
+
+    font-weight: bold;
+
+    white-space: nowrap;
+}
+
+
+.link-ver-todos {
+
+    display: inline-block;
+
+    margin-top: 15px;
+
+    color: #550000;
+
+    font-size: 14px;
+
+    font-weight: bold;
+
+    text-decoration: none;
+}
+
+
+.link-ver-todos:hover {
+
+    text-decoration: underline;
+}
+
+
+@media (max-width: 900px) {
+
+    .campo-linha {
+
+        flex-direction: column;
+
+        gap: 0;
     }
 
 }
