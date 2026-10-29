@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>KILOMETRA</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
+</head>
+<body>
+  <header class="topbar">
+    <a href="#inicio" class="logo" id="logo">KILOMETRA</a>
+    <nav class="menu">
+      <a href="#inicio" class="menu-item active" data-page="inicio">Início</a>
+      <a href="#veiculos" class="menu-item" data-page="veiculos">Veículos</a>
+      <a href="#abastecimentos" class="menu-item" data-page="abastecimentos">Abastecimentos</a>
+      <a href="#gastos" class="menu-item" data-page="gastos">Gastos</a>
+      <a href="#manutencoes" class="menu-item" data-page="manutencoes">Manutenções</a>
+      <a href="#relatorios" class="menu-item" data-page="relatorios">Relatórios</a>
+      <a href="#postos" class="menu-item" data-page="postos">Postos</a>
+    </nav>
+    <div class="usuario">Usuário XXX</div>
+  </header>
+
+  <main class="content">
+    <section id="inicio-page">
+      <h1>Visão geral</h1>
+      <section class="cards">
+        <div class="card"><p class="card-title">Veículo</p><p class="card-value">XXXXXXXXX</p></div>
+        <div class="card"><p class="card-title">Consumo médio</p><p class="card-value">12,5 km/L</p></div>
+        <div class="card"><p class="card-title">Gastos</p><p class="card-value">R$ 850,00</p></div>
+        <div class="card"><p class="card-title">Autonomia</p><p class="card-value">200 km</p></div>
+      </section>
+      <section class="dashboard">
+        <div class="panel" id="manutencoes"><h2>Próximas Manutenções</h2><p>Conteúdo das manutenções</p></div>
+        <div class="panel" id="abastecimentos"><h2>Últimos Abastecimentos</h2><p>Registros dos abastecimentos</p></div>
+      </section>
+    </section>
+
+    <section id="postos-page" hidden>
+      <div class="titulo-postos">
+        <div>
+          <h1>Postos de combustível</h1>
+          <p>Encontre postos próximos usando dados abertos do OpenStreetMap.</p>
+        </div>
+        <button type="button" id="btn-minha-localizacao">Usar minha localização</button>
+      </div>
+      <div class="busca-postos">
+        <input type="text" id="local-pesquisa" placeholder="Digite uma cidade ou endereço"
+               aria-label="Pesquisar cidade ou endereço">
+        <button type="button" id="buscar-postos">Buscar postos</button>
+      </div>
+      <div class="mapa-container"><div id="mapa-postos"></div></div>
+      <p id="status-postos" role="status" aria-live="polite">O mapa está sendo carregado...</p>
+      <p class="aviso-postos">Os resultados dependem dos dados disponíveis no OpenStreetMap. Este protótipo usa serviços públicos com limites de utilização.</p>
+      <ul id="lista-postos" class="lista-postos"></ul>
+    </section>
+
+    <section id="placeholder-page" hidden>
+      <h1 id="placeholder-title">Seção</h1>
+      <div class="panel"><p>Esta seção ainda não está implementada neste protótipo.</p></div>
+    </section>
+  </main>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+          integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+  <script>
+    // KILOMETRA - mapa gratuito com Leaflet + OpenStreetMap.
+    // Geocodificação: Nominatim. Pesquisa de postos: Overpass API.
+    const RAIO_POSTOS_METROS = 10000;
+    const MAX_POSTOS = 20;
+    const NOMINATIM_URL = "https://nominatim.openstreetmap.org/search";
+    const OVERPASS_URLS = [
+      "https://overpass-api.de/api/interpreter",
+      "https://overpass.kumi.systems/api/interpreter"
+    ];
+
+    let mapaPostos;
+    let camadaPostos;
+    let marcadores = [];
+
+    const $ = (id) => document.getElementById(id);
+    function atualizarStatus(mensagem) { $("status-postos").textContent = mensagem; }
+
+    function criarMapa() {
+      if (mapaPostos) return;
+      mapaPostos = L.map("mapa-postos").setView([-14.235, -51.9253], 4);
+      L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+        maxZoom: 19,
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+      }).addTo(mapaPostos);
+      camadaPostos = L.layerGroup().addTo(mapaPostos);
+    }
+
+    function abrirPagina(nome) {
+      const postos = nome === "postos";
+      $("inicio-page").hidden = postos || !["inicio"].includes(nome);
+      $("postos-page").hidden = !postos;
+      $("placeholder-page").hidden = postos || nome === "inicio";
+      if (!postos && nome !== "inicio") {
+        $("placeholder-title").textContent =
+          ({veiculos:"Veículos", abastecimentos:"Abastecimentos", gastos:"Gastos",
+            manutencoes:"Manutenções", relatorios:"Relatórios"})[nome] || "Seção";
+      }
+      document.querySelectorAll(".menu-item").forEach(link => {
+        link.classList.toggle("active", link.dataset.page === nome);
+      });
+      if (postos) {
+        criarMapa();
+        setTimeout(() => mapaPostos.invalidateSize(), 100);
+      }
+    }
+
+    document.querySelectorAll(".menu-item").forEach(link => {
+      link.addEventListener("click", (event) => {
+        event.preventDefault();
+        abrirPagina(link.dataset.page);
+      });
+    });
+    $("logo").addEventListener("click", (event) => {
+      event.preventDefault();
+      abrirPagina("inicio");
+      window.scrollTo({top: 0, behavior: "smooth"});
+    });
+
+    async function geocodificar(endereco) {
+      const url = new URL(NOMINATIM_URL);
+      url.search = new URLSearchParams({
+        q: endereco, format: "jsonv2", limit: "1", countrycodes: "br"
+      }).toString();
+      const resposta = await fetch(url, {headers: {"Accept-Language": "pt-BR"}});
+      if (!resposta.ok) throw new Error("Falha ao pesquisar o endereço.");
+      const resultados = await resposta.json();
+      if (!resultados.length) throw new Error("Endereço não encontrado. Tente informar cidade e estado.");
+      return {lat: Number(resultados[0].lat), lon: Number(resultados[0].lon), label: resultados[0].display_name};
+    }
+
+    async function buscarOverpass(lat, lon) {
+      const consulta = `[out:json][timeout:25];(node["amenity"="fuel"](around:${RAIO_POSTOS_METROS},${lat},${lon});way["amenity"="fuel"](around:${RAIO_POSTOS_METROS},${lat},${lon});relation["amenity"="fuel"](around:${RAIO_POSTOS_METROS},${lat},${lon}););out center tags;`;
+      let ultimoErro;
+      for (const endpoint of OVERPASS_URLS) {
+        try {
+          const resposta = await fetch(endpoint, {
+            method: "POST",
+            headers: {"Content-Type": "application/x-www-form-urlencoded;charset=UTF-8"},
+            body: "data=" + encodeURIComponent(consulta)
+          });
+          if (!resposta.ok) throw new Error("O serviço de busca está ocupado (HTTP " + resposta.status + ").");
+          const dados = await resposta.json();
+          return (dados.elements || []).map(item => {
+            const latPosto = item.lat ?? item.center?.lat;
+            const lonPosto = item.lon ?? item.center?.lon;
+            return {...item, latPosto, lonPosto};
+          }).filter(item => Number.isFinite(item.latPosto) && Number.isFinite(item.lonPosto))
+            .slice(0, MAX_POSTOS);
+        } catch (erro) { ultimoErro = erro; }
+      }
+      throw ultimoErro || new Error("Não foi possível consultar os postos agora.");
+    }
+
+    function limparPostos() {
+      camadaPostos.clearLayers();
+      marcadores = [];
+      $("lista-postos").replaceChildren();
+    }
+
+    function nomePosto(posto) {
+      return posto.tags?.name || posto.tags?.brand || posto.tags?.operator || "Posto de combustível";
+    }
+
+    function mostrarPostos(postos, centro) {
+      limparPostos();
+      postos.forEach(posto => {
+        const nome = nomePosto(posto);
+        const endereco = [
+          posto.tags?.["addr:street"],
+          posto.tags?.["addr:housenumber"],
+          posto.tags?.["addr:city"]
+        ].filter(Boolean).join(", ") || "Endereço não informado nos dados do mapa";
+        const marcador = L.marker([posto.latPosto, posto.lonPosto]).bindPopup(
+          `<strong>${escaparHTML(nome)}</strong><br>${escaparHTML(endereco)}`
+        ).addTo(camadaPostos);
+        marcadores.push(marcador);
+        const li = document.createElement("li");
+        const strong = document.createElement("strong");
+        strong.textContent = nome;
+        const p = document.createElement("p");
+        p.textContent = endereco;
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.textContent = "Ver no mapa";
+        btn.addEventListener("click", () => {
+          mapaPostos.setView([posto.latPosto, posto.lonPosto], 16);
+          marcador.openPopup();
+        });
+        li.append(strong, p, btn);
+        $("lista-postos").append(li);
+      });
+      if (postos.length) {
+        const limites = L.latLngBounds(postos.map(p => [p.latPosto, p.lonPosto]));
+        limites.extend([centro.lat, centro.lon]);
+        mapaPostos.fitBounds(limites.pad(0.15), {maxZoom: 14});
+        atualizarStatus(`${postos.length} posto(s) encontrado(s) em um raio de até 10 km.`);
+      } else {
+        mapaPostos.setView([centro.lat, centro.lon], 14);
+        atualizarStatus("Nenhum posto mapeado encontrado em um raio de 10 km. Tente outro endereço.");
+      }
+    }
+
+    function escaparHTML(texto) {
+      return String(texto).replace(/[&<>"']/g, c => ({
+        "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;"
+      }[c]));
+    }
+
+    async function pesquisarNaLocalizacao(local) {
+      criarMapa();
+      mapaPostos.setView([local.lat, local.lon], 13);
+      atualizarStatus("Buscando postos próximos...");
+      $("buscar-postos").disabled = true;
+      $("btn-minha-localizacao").disabled = true;
+      try {
+        const postos = await buscarOverpass(local.lat, local.lon);
+        mostrarPostos(postos, local);
+      } catch (erro) {
+        console.error(erro);
+        atualizarStatus((erro.message || "Erro ao pesquisar postos") +
+          " Aguarde um pouco e tente novamente.");
+      } finally {
+        $("buscar-postos").disabled = false;
+        $("btn-minha-localizacao").disabled = false;
+      }
+    }
+
+    $("buscar-postos").addEventListener("click", async () => {
+      const entrada = $("local-pesquisa").value.trim();
+      if (!entrada) {
+        atualizarStatus("Digite uma cidade ou endereço para pesquisar.");
+        return;
+      }
+      atualizarStatus("Localizando endereço...");
+      $("buscar-postos").disabled = true;
+      try {
+        const local = await geocodificar(entrada);
+        await pesquisarNaLocalizacao(local);
+      } catch (erro) {
+        atualizarStatus(erro.message || "Não foi possível localizar o endereço.");
+      } finally {
+        $("buscar-postos").disabled = false;
+      }
+    });
+    $("local-pesquisa").addEventListener("keydown", event => {
+      if (event.key === "Enter") $("buscar-postos").click();
+    });
+
+    $("btn-minha-localizacao").addEventListener("click", () => {
+      criarMapa();
+      if (!navigator.geolocation) {
+        atualizarStatus("Seu navegador não oferece suporte à localização. Pesquise um endereço.");
+        return;
+      }
+      atualizarStatus("Solicitando sua localização...");
+      navigator.geolocation.getCurrentPosition(
+        position => pesquisarNaLocalizacao({
+          lat: position.coords.latitude, lon: position.coords.longitude
+        }),
+        erro => {
+          const mensagens = {
+            1: "Permissão de localização negada. Autorize o acesso ou pesquise um endereço.",
+            2: "Não foi possível identificar sua localização. Pesquise um endereço.",
+            3: "A localização demorou muito. Tente novamente."
+          };
+          atualizarStatus(mensagens[erro.code] || "Não foi possível obter sua localização.");
+        },
+        {enableHighAccuracy: true, timeout: 15000, maximumAge: 60000}
+      );
+    });
+
+    // Inicializa o mapa somente quando o usuário abre a seção de postos.
+  </script>
+</body>
+</html>
